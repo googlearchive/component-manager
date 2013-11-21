@@ -5,55 +5,92 @@
   <style>
     body {
       font-family: "Helvetica Neue", Arial, Roboto, sans-serif;
+      font-size: x-small;
       padding: 10px 64px;
     }
     h2 {
       width: auto;
-      font-size: 36px;
+      font-size: 24px;
       text-transform: uppercase;
       border-radius: 0;
       box-sizing: border-box;
-      margin: 0;
-      padding: 64px;
+      margin: 0 0 12px 0;
+      padding: 32px 64px;
       color: white;
       background: #4285f4;
     }
-    h3 {
-      color: #4285f4;
-      position: relative;
-      line-height: 24px;
-      padding: 0;
-      font-size: 24px;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
   </style>
-  <script src="components/platform/platform.js"></script>
-  <link rel="import" href="components/polymer-ajax/polymer-ajax.html">
+  <script src="../platform/platform.js"></script>
+  <link rel="import" href="../polymer-ajax/polymer-ajax.html">
 </head>
 <body>
   <h2>Installed Components</h2>
   <elt-list></elt-list>
   <polymer-element name="elt-list">
     <template>
-      <polymer-ajax url="http://localhost:3003/bower/list" response="{{bowerList}}" handleAs="json" auto></polymer-ajax>
-      <template repeat="{{list}}">
-        <h3>{{name}}</h3>
-      </template>
+      <style>
+        img {
+          vertical-align: middle;
+          width: 16px;
+          padding: 0 4px 2px 0;
+        }
+        p {
+          margin: 0;
+          padding: 8px;
+          display: inline-block;
+          width: 400px;
+        }
+        p:hover {
+          background-color: #eee;
+        }
+        tools {
+          display: none;
+        }
+        p:hover tools {
+          font-size: 0.75em;
+          display: inline;
+        }
+        tools a {
+          background-color: #666;
+          color: white;
+          border-radius: 13px;
+          padding: 6px;
+          margin: 0 4px;
+          text-decoration: none;
+        }
+        tools a:hover {
+          background-color: lightblue;
+          color: black;
+        }
+        list {
+          display: block;
+          Xoverflow-x: scroll;
+          Xoverflow-y: hidden;
+        }
+      </style>
+      <polymer-ajax url="http://localhost:3003/components/" response="{{list}}" handleAs="json" auto></polymer-ajax>
+      <list>
+        <template repeat="{{list}}">
+          <p>
+            <template if="{{isBower}}"><img src="bower-logo.png"><b>{{name}}</b> ({{version}})</template>
+            <template if="{{isGit}}"><img src="git-logo.png"><b>{{name}}</b> ({{version}})</template>
+            <template if="{{isFolder}}"><img src="folder.png"><b>{{name}}</b></template>
+            <tools>
+              <template if="{{isGit}}"><a href=".">Convert to Component</a> <a href=".">Update</a></template>
+              <template if="{{isBower}}"><a href=".">Convert to Repository</a> <a href=".">Update</a></template>
+              <a href="../{{name}}/index.html" target="_blank">See Index</a>
+            </tools>
+          </p>
+        </template>
+      </list>
     </template>
     <script>
       Polymer('elt-list', {
-        bowerList: null,
-        bowerListChanged: function() {
-          this.list = [];
-          for (var name in this.bowerList) {
-            this.list.push({name: name});
-          }
+        compList: null,
+        compListChanged: function() {
         }
       });
     </script>
   </polymer-element>
-
 </body>
 </html>
