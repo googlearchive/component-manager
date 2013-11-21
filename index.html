@@ -1,0 +1,59 @@
+﻿<!doctype html>
+<html>
+<head>
+  <title>Bowager: Lister</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", Arial, Roboto, sans-serif;
+      padding: 10px 64px;
+    }
+    h2 {
+      width: auto;
+      font-size: 36px;
+      text-transform: uppercase;
+      border-radius: 0;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 64px;
+      color: white;
+      background: #4285f4;
+    }
+    h3 {
+      color: #4285f4;
+      position: relative;
+      line-height: 24px;
+      padding: 0;
+      font-size: 24px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+  </style>
+  <script src="components/platform/platform.js"></script>
+  <link rel="import" href="components/polymer-ajax/polymer-ajax.html">
+</head>
+<body>
+  <h2>Installed Components</h2>
+  <elt-list></elt-list>
+  <polymer-element name="elt-list">
+    <template>
+      <polymer-ajax url="http://localhost:3003/bower/list" response="{{bowerList}}" handleAs="json" auto></polymer-ajax>
+      <template repeat="{{list}}">
+        <h3>{{name}}</h3>
+      </template>
+    </template>
+    <script>
+      Polymer('elt-list', {
+        bowerList: null,
+        bowerListChanged: function() {
+          this.list = [];
+          for (var name in this.bowerList) {
+            this.list.push({name: name});
+          }
+        }
+      });
+    </script>
+  </polymer-element>
+
+</body>
+</html>
